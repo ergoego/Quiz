@@ -9,7 +9,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-    @IBOutlet var questionLabel: UILabel!
+    @IBOutlet var currentQuestionLabel: UILabel!
+    @IBOutlet var nextQuestionLabel: UILabel!
     @IBOutlet var answerLabel: UILabel!
     
     let questions: [String] = ["From what is cognac made?",
@@ -20,16 +21,33 @@ class ViewController: UIViewController {
                              "Montpelier"]
     var currentQuestionIndex: Int = 0
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        currentQuestionLabel.text = questions[currentQuestionIndex]
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        currentQuestionLabel.alpha = 1
+        nextQuestionLabel.alpha = 0
+    }
+    
     @IBAction func showNextQuestion(sender: AnyObject) {
+        
+        currentQuestionLabel.text = nextQuestionLabel.text
+        
+        animateFadeOut()
+        
         currentQuestionIndex += 1
         if currentQuestionIndex == questions.count {
             currentQuestionIndex = 0
         }
         
         let question: String = questions[currentQuestionIndex]
-        questionLabel.text = question
+        nextQuestionLabel.text = question
         answerLabel.text = "???"
         
+        animateFadeIn()
     }
     
     @IBAction func showAnswer(sender: AnyObject) {
@@ -38,11 +56,13 @@ class ViewController: UIViewController {
         
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        questionLabel.text = questions[currentQuestionIndex]
+    func animateFadeIn() {
+            nextQuestionLabel.alpha = 0
+            UIView.animate(withDuration: 1.0, animations: {self.nextQuestionLabel.alpha = 1})
     }
-    
-
+    func animateFadeOut() {
+        currentQuestionLabel.alpha = 1
+        UIView.animate(withDuration: 1.0, animations: {self.currentQuestionLabel.alpha = 0})
+    }
 }
 
