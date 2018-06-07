@@ -28,22 +28,25 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        currentQuestionLabel.alpha = 1
-        nextQuestionLabel.alpha = 0
+        currentQuestionLabel.alpha = 1 // Set the current question to visible
+        nextQuestionLabel.alpha = 0 // Set the next question to invisible
     }
     
     @IBAction func showNextQuestion(sender: AnyObject) {
         
-        currentQuestionLabel.text = nextQuestionLabel.text
+        if nextQuestionLabel.text != "???" { // set the current question as the previous next question so that it can be faded out, but only if nextQuestion is a valid question and not the placeholder "???"
+            currentQuestionLabel.text = nextQuestionLabel.text
+        }
         
-        animateFadeOut()
+        animateFadeOut() // fade out the current question
         
-        currentQuestionIndex += 1
+        currentQuestionIndex += 1 // increment the current question to next index. If this would cause the array to go out of bounds, loop back around to the first question at questions[0]
         if currentQuestionIndex == questions.count {
             currentQuestionIndex = 0
         }
         
-        let question: String = questions[currentQuestionIndex]
+        let question: String = questions[currentQuestionIndex] // remember, let does not allow you to change the reference, but allows you to change what is in that reference. In this case, we can let question equal the same, constant array of questions, but the index in questions can change and the compiler will allow that.
+        
         nextQuestionLabel.text = question
         answerLabel.text = "???"
         
@@ -58,11 +61,11 @@ class ViewController: UIViewController {
     
     func animateFadeIn() {
             nextQuestionLabel.alpha = 0
-            UIView.animate(withDuration: 1.0, animations: {self.nextQuestionLabel.alpha = 1})
+            UIView.animate(withDuration: 0.5, animations: {self.nextQuestionLabel.alpha = 1})
     }
     func animateFadeOut() {
         currentQuestionLabel.alpha = 1
-        UIView.animate(withDuration: 1.0, animations: {self.currentQuestionLabel.alpha = 0})
+        UIView.animate(withDuration: 0.5, animations: {self.currentQuestionLabel.alpha = 0})
     }
 }
 
