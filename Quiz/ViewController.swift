@@ -10,7 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet var currentQuestionLabel: UILabel!
+    @IBOutlet var currentQuestionLabelCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var nextQuestionLabel: UILabel!
+    @IBOutlet var nextQuestionLabelCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var answerLabel: UILabel!
     
     let questions: [String] = ["From what is cognac made?",
@@ -24,6 +26,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         currentQuestionLabel.text = questions[currentQuestionIndex]
+        
+        updateOffScreenLabelPosition()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,16 +57,31 @@ class ViewController: UIViewController {
     }
     
     func animateLabelTransitions() {
+        view.layoutIfNeeded() // resolve outstanding layout changes right before animation occurs. If we do not call this before the rest of the method, we will get some perhaps unintended consequences. In this case, we will also animate the size of the labels, so we will see the labels animate their re-sizing. You can see this happen if you delete this method call on view and run this app in the simulator with animations slowed (Command-T). The labels will animate their re-sizing. Not noticeable at full speed, but an unintended side-effect none-the-less that could muck up a more complex animation if not careful.
+        let screenWidth = view.frame.width
+        self.nextQuestionLabelCenterXConstraint.constant = 0
+        self.currentQuestionLabelCenterXConstraint.constant += screenWidth
+        
         UIView.animate(withDuration: 0.5,
-                       delay: 0,
-                       options: [],
                        animations: {
                             self.currentQuestionLabel.alpha = 0
                             self.nextQuestionLabel.alpha = 1
+                        
+                            self.view.layoutIfNeeded()
                         },
                        completion: { _ in
                             swap(&self.currentQuestionLabel, &self.nextQuestionLabel)
+                        
+                            swap(&self.nextQuestionLabelCenterXConstraint, &self.currentQuestionLabelCenterXConstraint)
+                        
+                            self.updateOffScreenLabelPosition() // need to call this method to set the off-screen label to be left of the screen (-screenWidth), otherwise the current and next question will get swapped, but the off-screen label will still be to the right of the screen and then our animation will go in and out of the right side of the screen instead of across from right to left. changed the name of this method to updateOffScreenLabelPosition to indicate that the position is what is important here.
+                        
                         })
     }
+    func updateOffScreenLabelPosition() {
+        let screenWidth = view.frame.width
+        nextQuestionLabelCenterXConstraint.constant = -screenWidth
+    }
+    
 }
 

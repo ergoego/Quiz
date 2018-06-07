@@ -57,26 +57,28 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="oNM-os-tA3" firstAttribute="top" secondItem="zmA-YC-8XH" secondAttribute="top" id="1Y6-kQ-S8n"/>
+                            <constraint firstItem="oNM-os-tA3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="1ea-X8-gUz"/>
                             <constraint firstItem="xU8-FM-KHH" firstAttribute="top" secondItem="oNM-os-tA3" secondAttribute="bottom" constant="8" id="2St-KS-5yB"/>
                             <constraint firstItem="kF3-Wn-JIc" firstAttribute="top" secondItem="xU8-FM-KHH" secondAttribute="bottom" constant="244" id="57w-ra-NYQ"/>
                             <constraint firstItem="kF3-Wn-JIc" firstAttribute="centerX" secondItem="xU8-FM-KHH" secondAttribute="centerX" id="9wb-4b-unJ"/>
                             <constraint firstItem="zmA-YC-8XH" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="Cbx-OK-P1b"/>
-                            <constraint firstItem="zmA-YC-8XH" firstAttribute="centerX" secondItem="xU8-FM-KHH" secondAttribute="centerX" id="McA-ez-Pp3"/>
-                            <constraint firstItem="oNM-os-tA3" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="XJM-uO-ZWn"/>
                             <constraint firstItem="ABg-Se-qmE" firstAttribute="top" secondItem="kF3-Wn-JIc" secondAttribute="bottom" constant="8" id="Z38-Bu-Ar8"/>
-                            <constraint firstItem="xU8-FM-KHH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dGc-cm-qFU"/>
+                            <constraint firstItem="xU8-FM-KHH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="i1b-pA-gpf"/>
+                            <constraint firstItem="zmA-YC-8XH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="mb2-3B-jMX"/>
                             <constraint firstItem="ABg-Se-qmE" firstAttribute="centerX" secondItem="xU8-FM-KHH" secondAttribute="centerX" id="z14-n8-I8A"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="answerLabel" destination="kF3-Wn-JIc" id="mQ5-0u-5yg"/>
                         <outlet property="currentQuestionLabel" destination="zmA-YC-8XH" id="As1-ke-DK2"/>
+                        <outlet property="currentQuestionLabelCenterXConstraint" destination="mb2-3B-jMX" id="1AM-4V-kYA"/>
                         <outlet property="nextQuestionLabel" destination="oNM-os-tA3" id="ahk-7E-9Ch"/>
+                        <outlet property="nextQuestionLabelCenterXConstraint" destination="1ea-X8-gUz" id="mNQ-pL-g6w"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-36" y="116"/>
+            <point key="canvasLocation" x="-37.5" y="115.14084507042254"/>
         </scene>
     </scenes>
 </document>
