@@ -28,17 +28,10 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        currentQuestionLabel.alpha = 1 // Set the current question to visible
         nextQuestionLabel.alpha = 0 // Set the next question to invisible
     }
     
     @IBAction func showNextQuestion(sender: AnyObject) {
-        
-        if nextQuestionLabel.text != "???" { // set the current question as the previous next question so that it can be faded out, but only if nextQuestion is a valid question and not the placeholder "???"
-            currentQuestionLabel.text = nextQuestionLabel.text
-        }
-        
-        animateFadeOut() // fade out the current question
         
         currentQuestionIndex += 1 // increment the current question to next index. If this would cause the array to go out of bounds, loop back around to the first question at questions[0]
         if currentQuestionIndex == questions.count {
@@ -50,7 +43,7 @@ class ViewController: UIViewController {
         nextQuestionLabel.text = question
         answerLabel.text = "???"
         
-        animateFadeIn()
+        animateLabelTransitions()
     }
     
     @IBAction func showAnswer(sender: AnyObject) {
@@ -59,13 +52,17 @@ class ViewController: UIViewController {
         
     }
     
-    func animateFadeIn() {
-            nextQuestionLabel.alpha = 0
-            UIView.animate(withDuration: 0.5, animations: {self.nextQuestionLabel.alpha = 1})
-    }
-    func animateFadeOut() {
-        currentQuestionLabel.alpha = 1
-        UIView.animate(withDuration: 0.5, animations: {self.currentQuestionLabel.alpha = 0})
+    func animateLabelTransitions() {
+        UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       options: [],
+                       animations: {
+                            self.currentQuestionLabel.alpha = 0
+                            self.nextQuestionLabel.alpha = 1
+                        },
+                       completion: { _ in
+                            swap(&self.currentQuestionLabel, &self.nextQuestionLabel)
+                        })
     }
 }
 
