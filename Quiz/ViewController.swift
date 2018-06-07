@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet var nextQuestionLabel: UILabel!
     @IBOutlet var nextQuestionLabelCenterXConstraint: NSLayoutConstraint!
     @IBOutlet var answerLabel: UILabel!
+    @IBOutlet var nextQuestionButton: UIButton! // added to get programmatic access to this button so that it can be enabled/disabled during current/next question animation. Repeated taps to this button while the animation is occuring allows for buggy behavior (label can disappear).
     
     let questions: [String] = ["From what is cognac made?",
                                "What is 7+7?",
@@ -57,12 +58,17 @@ class ViewController: UIViewController {
     }
     
     func animateLabelTransitions() {
+        nextQuestionButton.isEnabled = false
         view.layoutIfNeeded() // resolve outstanding layout changes right before animation occurs. If we do not call this before the rest of the method, we will get some perhaps unintended consequences. In this case, we will also animate the size of the labels, so we will see the labels animate their re-sizing. You can see this happen if you delete this method call on view and run this app in the simulator with animations slowed (Command-T). The labels will animate their re-sizing. Not noticeable at full speed, but an unintended side-effect none-the-less that could muck up a more complex animation if not careful.
         let screenWidth = view.frame.width
         self.nextQuestionLabelCenterXConstraint.constant = 0
         self.currentQuestionLabelCenterXConstraint.constant += screenWidth
         
         UIView.animate(withDuration: 0.5,
+                       delay: 0,
+                       usingSpringWithDamping: 0.5, // damping ratio of 1 means perfectly damped, so no spring effect.
+                       initialSpringVelocity: 0.5,  // a velocity of 1 would be the total travel distance of the animation in 1 second. 0.5 would be half of the animation distance in a second, etc. 
+                       options: [],
                        animations: {
                             self.currentQuestionLabel.alpha = 0
                             self.nextQuestionLabel.alpha = 1
@@ -71,11 +77,11 @@ class ViewController: UIViewController {
                         },
                        completion: { _ in
                             swap(&self.currentQuestionLabel, &self.nextQuestionLabel)
-                        
-                            swap(&self.nextQuestionLabelCenterXConstraint, &self.currentQuestionLabelCenterXConstraint)
+                            swap(&self.nextQuestionLabelCenterXConstraint, &self.currentQuestionLabelCenterXConstraint) // references and constraints get swapped - the next question becomes the current, and the current question becomes the next question. 
                         
                             self.updateOffScreenLabelPosition() // need to call this method to set the off-screen label to be left of the screen (-screenWidth), otherwise the current and next question will get swapped, but the off-screen label will still be to the right of the screen and then our animation will go in and out of the right side of the screen instead of across from right to left. changed the name of this method to updateOffScreenLabelPosition to indicate that the position is what is important here.
                         
+                            self.nextQuestionButton.isEnabled = true
                         })
     }
     func updateOffScreenLabelPosition() {
